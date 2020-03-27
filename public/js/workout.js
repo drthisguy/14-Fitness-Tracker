@@ -1,5 +1,6 @@
 async function initWorkout() {
   const lastWorkout = await API.getLastWorkout();
+  console.log("initWorkout -> lastWorkout", lastWorkout)
   if (lastWorkout) {
     document
       .querySelector("a[href='/exercise?']")
@@ -18,7 +19,12 @@ async function initWorkout() {
 }
 
 function tallyExercises(exercises) {
-  const tallied = exercises.reduce((acc, curr) => {
+  let tallied;
+  if (exercises.length < 2) {
+   
+   return exercises[0]  
+}
+  tallied = exercises.reduce((acc, curr) => {
     if (curr.type === "resistance") {
       acc.totalDuration = (acc.totalDuration || 0) + curr.duration;
       acc.totalWeight = (acc.totalWeight || 0) + curr.weight;
@@ -30,7 +36,10 @@ function tallyExercises(exercises) {
     }
     return acc;
   }, {});
-  tallied.totalDuration += 'mins'
+  tallied.totalDistance.toFixed(2);
+  tallied.totalDistance += 'miles';
+  tallied.totalDuration += 'mins';
+  tallied.totalWeight += 'lbs';
   return tallied;
 }
 
@@ -46,27 +55,35 @@ function formatDate(date) {
 }
 
 function renderWorkoutSummary(summary) {
+  console.log("renderWorkoutSummary -> summary", summary)
   const container = document.querySelector(".workout-stats");
 
   const workoutKeyMap = {
     date: "Date",
     totalDuration: "Total Workout Duration",
+    duration: "Total Workout Duration",
     numExercises: "Exercises Performed",
     totalWeight: "Total Weight Lifted",
+    weight: "Total Weight Lifted",
     totalSets: "Total Sets Performed",
+    sets: "Total Sets Performed",
     totalReps: "Total Reps Performed",
-    totalDistance: "Total Distance Covered"
+    reps: "Total Reps Performed",
+    totalDistance: "Total Distance Covered",
+    distance: "Total Distance Covered"
   };
 
   Object.keys(summary).forEach( key => {
     const p = document.createElement("p");
     const strong = document.createElement("strong");
+    let textNode;
 
     strong.textContent = workoutKeyMap[key];
-    const textNode = document.createTextNode(`: ${summary[key]}`);
-
+    if (strong.textContent) {
+    textNode = document.createTextNode(`: ${summary[key]}`);
     p.appendChild(strong);
     p.appendChild(textNode);
+    }
 
     container.appendChild(p);
   });
