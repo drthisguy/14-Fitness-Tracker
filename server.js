@@ -10,7 +10,7 @@ app.use(express.json());
 
 app.use(express.static("public"));
 
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/fitness", {
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", {
   useNewUrlParser: true,
   useFindAndModify: false //may be needed for an indexDB option.   revisit this later.
 },
@@ -18,9 +18,9 @@ mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/fitness", {
     .catch(  err => {console.log(err)});
 
 // routes
-// require("./routes/html-routes.js")(app);
+require("./routes/html-routes.js")(app);
 require("./routes/api-routes.js")(app);
 
 app.listen(PORT, () => {
-  console.log(`App running on port ${PORT}!`);
+    console.log("==> 🌎  Listening on port %s. Visit http://localhost:%s/ in your browser.", PORT, PORT);
 });

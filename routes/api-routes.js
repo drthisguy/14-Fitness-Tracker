@@ -27,7 +27,7 @@ router.get("/api/workouts", (req, res) => {
 
 // get all workouts
 router.get("/api/workouts/range", (req, res) => {
-    Workout.findAll({})
+    Workout.find({})
         .sort({ _id: -1 })
         .then(dbWorkout => {
         res.json(dbWorkout);
