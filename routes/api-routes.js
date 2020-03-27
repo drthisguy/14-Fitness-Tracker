@@ -17,9 +17,7 @@ router.post("/api/workouts", ({ body }, res) => {
 // get last workout
 router.get("/api/workouts", (req, res) => {
     Workout.findOne({}).sort({ day: -1 })
-        .then(dbWorkout => {
-        console.log("dbWorkout", dbWorkout)
-            
+        .then(dbWorkout => {           
         res.send(dbWorkout);
         })
         .catch(err => {
@@ -40,11 +38,13 @@ router.get("/api/workouts/range", (req, res) => {
 
 // add exercise to workout. 
 router.put("/api/workouts/:id", (req, res) => {
+console.log("req", req.body)
     Workout.findOneAndUpdate(
         {_id: req.params.id}, 
         {$push: {exercises: req.body}}
         ).then(dbWorkout => {
-        res.json(dbWorkout);
+        console.log("dbWorkout", dbWorkout)
+        res.send(dbWorkout);
         })
         .catch(err => {
         res.status(400).json(err);
