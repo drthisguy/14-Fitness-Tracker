@@ -12,6 +12,7 @@ app.use(express.static("public"));
 
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", {
   useNewUrlParser: true,
+  useUnifiedTopology: true,
   useFindAndModify: false //may be needed for an indexDB option.   revisit this later.
 },
 ).then(() => {console.log('Connection to database established.')})
