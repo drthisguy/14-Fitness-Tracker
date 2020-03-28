@@ -35,8 +35,9 @@ API.getWorkoutsInRange()
   return arr;
   }
 function populateChart(data) {
-  let durations = duration(data);
-  let pounds = calculateTotalWeight(data);
+  const mapedData = mapDataToWeekday(data);
+  let durations = duration(mapedData);
+  let pounds = calculateTotalWeight(mapedData);
   let workouts = workoutNames(data);
   const colors = generatePalette();
 
@@ -187,33 +188,43 @@ function populateChart(data) {
   });
 }
 
-function duration(data) {
-  let durations = [];
 
-  data.forEach(workout => {
-    workout.exercises.forEach(exercise => {
-      durations.push(exercise.duration);
-    });
+// Map each data point to its rightful day of week 
+function mapDataToWeekday(data) {
+  let days = data;
+  
+  // limit to size of graph
+  if (days.length > 7) {
+    days.splice(6);
+  }
+  //start week on sunday to line up data points
+  days.forEach( (workout, index) => {
+    if (new Date(workout.day).getDay() === 0)
+    days.splice(index + 1);
   });
+  // ensure it's sorted in order.
+  days.sort( (a,b) => a.day - b.day);
+  
+  return days;
+ }
 
-  return durations;
+function duration(data) {
+  let total = [];
+
+    data.forEach( ({ exercises }) => {
+      duration = exercises.filter(x => typeof(x.duration) !== 'undefined').reduce((a, b) => a + b.duration, 0);
+
+      if (!duration) {
+        total.push(0);
+      } else {
+        total.push(duration);
+      }
+    });
+  return total;
 }
 
 function calculateTotalWeight(data) {
-  
-  console.log("calculateTotalWeight -> data", data)
   let total = [];
-  if (data.length > 7){
-    data.splice(6);
-  }
-  data.forEach( (workout, index) => {
-    if (new Date(workout.day).getDay() === 0)
-    data.splice(index + 1);
-    console.log("calculateTotalWeight -> workout", data)
-  });
-  data.sort( (a,b) => a.day - b.day);
-  console.log("calculateTotalWeight -> data", data)
-  // total = data.exercises.map(x => x.weight);
 
     data.forEach( ({ exercises }) => {
       weight = exercises.filter(x => typeof(x.weight) !== 'undefined').reduce((a, b) => a + b.weight, 0);
@@ -221,11 +232,9 @@ function calculateTotalWeight(data) {
       if (!weight) {
         total.push(0);
       } else {
-        console.log("calculateTotalWeight -> exercises", weight)
         total.push(weight);
       }
     });
-  console.log("calculateTotalWeight -> total", total)
   return total;
 }
 
