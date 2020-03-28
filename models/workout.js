@@ -2,7 +2,7 @@ const mongoose= require("mongoose"),
     { Schema } = mongoose,
 
 workoutSchema = new Schema({
-    day: { type: Date, default: Date.now },
+    day: { type: Number, default: new Date().getTime() },
     exercises: Array
 });
 

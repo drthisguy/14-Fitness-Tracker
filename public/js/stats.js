@@ -6,10 +6,11 @@ fetch("/api/workouts/range")
   })
   .then(data => {
     populateChart(data);
+    console.log("data", data)
   });
 
 
-API.getWorkoutsInRange()
+API.getWorkoutsInRange() 
 
   function generatePalette() {
     const arr = [
@@ -34,8 +35,9 @@ API.getWorkoutsInRange()
   return arr;
   }
 function populateChart(data) {
-  let durations = duration(data);
-  let pounds = calculateTotalWeight(data);
+  const mapedData = mapDataToWeekday(data);
+  let durations = duration(mapedData);
+  let pounds = calculateTotalWeight(mapedData);
   let workouts = workoutNames(data);
   const colors = generatePalette();
 
@@ -151,7 +153,7 @@ function populateChart(data) {
       labels: workouts,
       datasets: [
         {
-          label: "Excercises Performed",
+          label: "Exercises Performed",
           backgroundColor: colors,
           data: durations
         }
@@ -160,7 +162,7 @@ function populateChart(data) {
     options: {
       title: {
         display: true,
-        text: "Excercises Performed"
+        text: "Exercises Performed"
       }
     }
   });
@@ -171,7 +173,7 @@ function populateChart(data) {
       labels: workouts,
       datasets: [
         {
-          label: "Excercises Performed",
+          label: "Exercises Performed",
           backgroundColor: colors,
           data: pounds
         }
@@ -180,33 +182,59 @@ function populateChart(data) {
     options: {
       title: {
         display: true,
-        text: "Excercises Performed"
+        text: "Exercises Performed"
       }
     }
   });
 }
 
-function duration(data) {
-  let durations = [];
 
-  data.forEach(workout => {
-    workout.exercises.forEach(exercise => {
-      durations.push(exercise.duration);
-    });
+// Map each data point to its rightful day of week 
+function mapDataToWeekday(data) {
+  let days = data;
+  
+  // limit to size of graph
+  if (days.length > 7) {
+    days.splice(6);
+  }
+  //start week on sunday to line up data points
+  days.forEach( (workout, index) => {
+    if (new Date(workout.day).getDay() === 0)
+    days.splice(index + 1);
   });
+  // ensure it's sorted in order.
+  days.sort( (a,b) => a.day - b.day);
+  
+  return days;
+ }
 
-  return durations;
+function duration(data) {
+  let total = [];
+
+    data.forEach( ({ exercises }) => {
+      duration = exercises.filter(x => typeof(x.duration) !== 'undefined').reduce((a, b) => a + b.duration, 0);
+
+      if (!duration) {
+        total.push(0);
+      } else {
+        total.push(duration);
+      }
+    });
+  return total;
 }
 
 function calculateTotalWeight(data) {
   let total = [];
 
-  data.forEach(workout => {
-    workout.exercises.forEach(exercise => {
-      total.push(exercise.weight);
-    });
-  });
+    data.forEach( ({ exercises }) => {
+      weight = exercises.filter(x => typeof(x.weight) !== 'undefined').reduce((a, b) => a + b.weight, 0);
 
+      if (!weight) {
+        total.push(0);
+      } else {
+        total.push(weight);
+      }
+    });
   return total;
 }
 
