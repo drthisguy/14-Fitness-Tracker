@@ -36,8 +36,10 @@ function tallyExercises(exercises) {
     }
     return acc;
   }, {});
+    if (tallied.totalDistance) {
   tallied.totalDistance.toFixed(2);
   tallied.totalDistance += 'miles';
+    }
   tallied.totalDuration += 'mins';
   tallied.totalWeight += 'lbs';
   return tallied;

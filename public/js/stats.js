@@ -1,9 +1,8 @@
 // get all workout data from back-end
 
-(init = async () => {
+( async () => {
      data = await API.getWorkoutsInRange()
      populateChart(data);
-     console.log("data", data)
 })();
      
 
@@ -30,9 +29,9 @@
   return arr;
   }
 function populateChart(data) {
-  const mapedData = mapDataToWeekday(data);
-  let durations = duration(mapedData);
-  let pounds = calculateTotalWeight(mapedData);
+  const mappedData = mapDataToWeekday(data);
+  let durations = duration(mappedData);
+  let pounds = calculateTotalWeight(mappedData);
   let workouts = workoutNames(data);
   const colors = generatePalette();
 
@@ -196,14 +195,12 @@ function mapDataToWeekday(data) {
     // ensure it's sorted in order.
     days.sort( (a,b) => a.day - b.day);
    
-    
-  //sort each day into its proper weekday position. 
-  days.forEach( workout => {
-    const dayOfWeek = new Date(workout.day).getDay();
+    //sort each day into its proper weekday position. 
+    days.forEach( workout => {
+      const dayOfWeek = new Date(workout.day).getDay();
 
       week.splice(dayOfWeek, 1, workout);
   })
-  console.log("mapDataToWeekday -> week", week)
   return week;
  }
 
@@ -238,6 +235,7 @@ function calculateTotalWeight(data) {
 }
 
 function workoutNames(data) {
+  console.log("workoutNames -> data", data)
   let workouts = [];
 
   data.forEach(workout => {
