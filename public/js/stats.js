@@ -200,14 +200,32 @@ function duration(data) {
 }
 
 function calculateTotalWeight(data) {
+  
+  console.log("calculateTotalWeight -> data", data)
   let total = [];
-
-  data.forEach(workout => {
-    workout.exercises.forEach(exercise => {
-      total.push(exercise.weight);
-    });
+  if (data.length > 7){
+    data.splice(6);
+  }
+  data.forEach( (workout, index) => {
+    if (new Date(workout.day).getDay() === 0)
+    data.splice(index + 1);
+    console.log("calculateTotalWeight -> workout", data)
   });
+  data.sort( (a,b) => a.day - b.day);
+  console.log("calculateTotalWeight -> data", data)
+  // total = data.exercises.map(x => x.weight);
 
+    data.forEach( ({ exercises }) => {
+      weight = exercises.filter(x => typeof(x.weight) !== 'undefined').reduce((a, b) => a + b.weight, 0);
+
+      if (!weight) {
+        total.push(0);
+      } else {
+        console.log("calculateTotalWeight -> exercises", weight)
+        total.push(weight);
+      }
+    });
+  console.log("calculateTotalWeight -> total", total)
   return total;
 }
 
