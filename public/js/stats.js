@@ -1,16 +1,11 @@
 // get all workout data from back-end
 
-fetch("/api/workouts/range")
-  .then(response => {
-    return response.json();
-  })
-  .then(data => {
-    populateChart(data);
-    console.log("data", data)
-  });
-
-
-API.getWorkoutsInRange() 
+(init = async () => {
+     data = await API.getWorkoutsInRange()
+     populateChart(data);
+     console.log("data", data)
+})();
+     
 
   function generatePalette() {
     const arr = [
@@ -191,33 +186,37 @@ function populateChart(data) {
 
 // Map each data point to its rightful day of week 
 function mapDataToWeekday(data) {
-  let days = data;
-  
-  // limit to size of graph
-  if (days.length > 7) {
-    days.splice(6);
-  }
-  //start week on sunday to line up data points
-  days.forEach( (workout, index) => {
-    if (new Date(workout.day).getDay() === 0)
-    days.splice(index + 1);
-  });
-  // ensure it's sorted in order.
-  days.sort( (a,b) => a.day - b.day);
-  
-  return days;
+  let days = data,
+    week = [0,1,2,3,4,5,6];
+
+    // limit to size of graph
+    if (days.length > 7) {
+      days.splice(6);
+    }
+    // ensure it's sorted in order.
+    days.sort( (a,b) => a.day - b.day);
+   
+    
+  //sort each day into its proper weekday position. 
+  days.forEach( workout => {
+    const dayOfWeek = new Date(workout.day).getDay();
+
+      week.splice(dayOfWeek, 1, workout);
+  })
+  console.log("mapDataToWeekday -> week", week)
+  return week;
  }
 
 function duration(data) {
   let total = [];
 
     data.forEach( ({ exercises }) => {
-      duration = exercises.filter(x => typeof(x.duration) !== 'undefined').reduce((a, b) => a + b.duration, 0);
+      if (typeof(exercises) === 'object') {
 
-      if (!duration) {
-        total.push(0);
+      duration = exercises.filter(x => typeof(x.duration) !== 'undefined').reduce((a, b) => a + b.duration, 0);
+      total.push(duration);
       } else {
-        total.push(duration);
+        total.push(0);
       }
     });
   return total;
@@ -227,12 +226,12 @@ function calculateTotalWeight(data) {
   let total = [];
 
     data.forEach( ({ exercises }) => {
-      weight = exercises.filter(x => typeof(x.weight) !== 'undefined').reduce((a, b) => a + b.weight, 0);
+      if (typeof(exercises) === 'object') {
 
-      if (!weight) {
-        total.push(0);
+      weight = exercises.filter(x => typeof(x.weight) !== 'undefined').reduce((a, b) => a + b.weight, 0);
+      total.push(weight);
       } else {
-        total.push(weight);
+        total.push(0);
       }
     });
   return total;
