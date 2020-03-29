@@ -245,6 +245,7 @@ function workoutNames(data) {
       workouts.push(exercise.name);
     })
   }});
+  console.log("workoutNames -> workouts", workouts)
   return workouts;
 }
 
