@@ -29,6 +29,7 @@
   return arr;
   }
 async function populateChart(data) {
+console.log("populateChart -> data", data)
 
   const mappedData = mapDataToWeekday(data);
   console.log("populateChart -> mappedData", mappedData);
