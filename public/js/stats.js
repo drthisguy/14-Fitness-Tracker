@@ -33,8 +33,9 @@
 
   const mappedData = mapDataToWeekday(data),
     durations = duration(mappedData),
-    pounds = calculateTotalWeight(mappedData),
-    workouts = workoutNames(mappedData),
+    pounds = calculateTotalWeight(mappedData);
+    console.log("populateChart -> pounds", pounds)
+    const workouts = workoutNames(mappedData),
     colors = generatePalette();
 
   let line = document.querySelector("#canvas").getContext("2d");
