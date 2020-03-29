@@ -33,9 +33,8 @@
 
   const mappedData = mapDataToWeekday(data),
     durations = duration(mappedData),
-    pounds = calculateTotalWeight(mappedData);
-    console.log("populateChart -> pounds", pounds)
-    const workouts = workoutNames(mappedData),
+    pounds = calculateTotalWeight(mappedData),
+    workouts = workoutNames(data),
     colors = generatePalette();
 
   let line = document.querySelector("#canvas").getContext("2d");
@@ -234,6 +233,7 @@ function calculateTotalWeight(data) {
         total.push(0);
       }
     });
+    console.log("total", total)
     return total
 }
 
@@ -245,6 +245,8 @@ function workoutNames(data) {
     exercises.forEach( exercise => {
       workouts.push(exercise.name);
     })
+  } else {
+    workouts.push('No Workout');
   }});
   console.log("workoutNames -> workouts", workouts)
   return workouts;
