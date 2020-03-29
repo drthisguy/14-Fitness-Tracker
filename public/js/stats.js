@@ -146,12 +146,12 @@
   let pieChart = new Chart(pie, {
     type: "pie",
     data: {
-      labels: workouts,
+      labels: workouts.labels,
       datasets: [
         {
           label: "Exercises Performed",
           backgroundColor: colors,
-          data: durations
+          data: workouts.endurance
         }
       ]
     },
@@ -166,12 +166,12 @@
   let donutChart = new Chart(pie2, {
     type: "doughnut",
     data: {
-      labels: workouts,
+      labels: workouts.labels,
       datasets: [
         {
           label: "Exercises Performed",
           backgroundColor: colors,
-          data: pounds
+          data: workouts.pounds
         }
       ]
     },
@@ -207,7 +207,7 @@ function mapDataToWeekday(data) {
  }
 
 function duration(data) {
-    let total = [];
+    const total = [];
     
     data.forEach( ({ exercises }) => {
       if (typeof(exercises) === 'object') {
@@ -222,7 +222,7 @@ function duration(data) {
 }
 
 function calculateTotalWeight(data) {
-    let total = [];
+    const total = [];
     
     data.forEach( ({ exercises }) => {
       if (typeof(exercises) === 'object') {
@@ -238,18 +238,32 @@ function calculateTotalWeight(data) {
 }
 
 function workoutNames(data) {
-  let workouts = [];
+  const workouts = [],
+    magnitude = [],
+    time = [];
 
   data.forEach( ({ exercises }) => {
   if (typeof(exercises) === 'object') {
     exercises.forEach( exercise => {
+
       workouts.push(exercise.name);
+      time.push(exercise.duration);
+
+      if (exercise.weight) {
+        magnitude.push(exercise.weight);
+      } else {
+        magnitude.push(0);
+      }
     })
   } else {
     workouts.push('No Workout');
   }});
   console.log("workoutNames -> workouts", workouts)
-  return workouts;
+  return {
+    labels: workouts, 
+    pounds: magnitude,
+    endurance: time
+  }
 }
 
 
