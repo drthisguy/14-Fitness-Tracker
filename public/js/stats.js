@@ -30,10 +30,13 @@
   }
 async function populateChart(data) {
 
-  const mappedData = mapDataToWeekday(data),
-    durations = await duration(mappedData),
-    pounds = await calculateTotalWeight(mappedData),
-    workouts = workoutNames(data),
+  const mappedData = mapDataToWeekday(data);
+  console.log("populateChart -> mappedData", mappedData);
+   const durations = await duration(mappedData);
+    console.log("populateChart -> durations", durations)
+    const pounds = await calculateTotalWeight(mappedData);
+    console.log("populateChart -> pounds", pounds)
+    const workouts = workoutNames(data),
     colors = generatePalette();
 
   let line = document.querySelector("#canvas").getContext("2d");
