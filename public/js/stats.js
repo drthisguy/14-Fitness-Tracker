@@ -28,19 +28,20 @@
 
   return arr;
   }
-function populateChart(data) {
-  const mappedData = mapDataToWeekday(data);
-  let durations = duration(mappedData);
-  let pounds = calculateTotalWeight(mappedData);
-  let workouts = workoutNames(data);
-  const colors = generatePalette();
+async function populateChart(data) {
+
+  const mappedData = mapDataToWeekday(data),
+    durations = await duration(mappedData),
+    pounds = await calculateTotalWeight(mappedData),
+    workouts = workoutNames(data),
+    colors = generatePalette();
 
   let line = document.querySelector("#canvas").getContext("2d");
-  let bar = document.querySelector("#canvas2").getContext("2d");
-  let pie = document.querySelector("#canvas3").getContext("2d");
-  let pie2 = document.querySelector("#canvas4").getContext("2d");
+    bar = document.querySelector("#canvas2").getContext("2d"),
+    pie = document.querySelector("#canvas3").getContext("2d"),
+    pie2 = document.querySelector("#canvas4").getContext("2d"),
 
-  let lineChart = new Chart(line, {
+    lineChart = new Chart(line, {
     type: "line",
     data: {
       labels: [
@@ -185,7 +186,7 @@ function populateChart(data) {
 
 // Map each data point to its rightful day of week 
 function mapDataToWeekday(data) {
-  let days = data,
+  const days = data,
     week = [0,1,2,3,4,5,6];
 
     // limit to size of graph
@@ -205,37 +206,40 @@ function mapDataToWeekday(data) {
  }
 
 function duration(data) {
-  let total = [];
-
+  return new Promise( resolve => {
+    let total = [];
+    
     data.forEach( ({ exercises }) => {
       if (typeof(exercises) === 'object') {
-
-      duration = exercises.filter(x => typeof(x.duration) !== 'undefined').reduce((a, b) => a + b.duration, 0);
-      total.push(duration);
+        
+        duration = exercises.filter(x => typeof(x.duration) !== 'undefined').reduce((a, b) => a + b.duration, 0);
+        total.push(duration);
       } else {
         total.push(0);
       }
     });
-  return total;
+    resolve(total);
+  });
 }
 
 function calculateTotalWeight(data) {
-  let total = [];
-
+  return new Promise( resolve => {
+    let total = [];
+    
     data.forEach( ({ exercises }) => {
       if (typeof(exercises) === 'object') {
-
-      weight = exercises.filter(x => typeof(x.weight) !== 'undefined').reduce((a, b) => a + b.weight, 0);
-      total.push(weight);
+        
+        weight = exercises.filter(x => typeof(x.weight) !== 'undefined').reduce((a, b) => a + b.weight, 0);
+        total.push(weight);
       } else {
         total.push(0);
       }
     });
-  return total;
+    resolve(total);
+  });
 }
 
 function workoutNames(data) {
-  console.log("workoutNames -> data", data)
   let workouts = [];
 
   data.forEach(workout => {
