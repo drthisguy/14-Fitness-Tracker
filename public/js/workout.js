@@ -1,6 +1,6 @@
 async function initWorkout() {
   const lastWorkout = await API.getLastWorkout();
-  console.log("initWorkout -> lastWorkout", lastWorkout)
+
   if (lastWorkout) {
     document
       .querySelector("a[href='/exercise?']")
@@ -57,7 +57,6 @@ function formatDate(date) {
 }
 
 function renderWorkoutSummary(summary) {
-  console.log("renderWorkoutSummary -> summary", summary)
   const container = document.querySelector(".workout-stats");
 
   const workoutKeyMap = {

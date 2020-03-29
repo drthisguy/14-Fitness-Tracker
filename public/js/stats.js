@@ -28,16 +28,13 @@
 
   return arr;
   }
-async function populateChart(data) {
-console.log("populateChart -> data", data)
+ function populateChart(data) {
 
-  const mappedData = mapDataToWeekday(data);
-  console.log("populateChart -> mappedData", mappedData);
-   const durations = await duration(mappedData);
-    console.log("populateChart -> durations", durations)
-    const pounds = await calculateTotalWeight(mappedData);
-    console.log("populateChart -> pounds", pounds)
-    const workouts = workoutNames(data),
+
+  const mappedData = mapDataToWeekday(data),
+    durations = duration(mappedData),
+    pounds = calculateTotalWeight(mappedData),
+    workouts = workoutNames(mappedData),
     colors = generatePalette();
 
   let line = document.querySelector("#canvas").getContext("2d");
@@ -210,7 +207,6 @@ function mapDataToWeekday(data) {
  }
 
 function duration(data) {
-  return new Promise( resolve => {
     let total = [];
     
     data.forEach( ({ exercises }) => {
@@ -222,12 +218,10 @@ function duration(data) {
         total.push(0);
       }
     });
-    resolve(total);
-  });
+    return total
 }
 
 function calculateTotalWeight(data) {
-  return new Promise( resolve => {
     let total = [];
     
     data.forEach( ({ exercises }) => {
@@ -239,18 +233,19 @@ function calculateTotalWeight(data) {
         total.push(0);
       }
     });
-    resolve(total);
-  });
+    return total
 }
 
 function workoutNames(data) {
   let workouts = [];
 
-  data.forEach(workout => {
-    workout.exercises.forEach(exercise => {
+  data.forEach( ({ exercises }) => {
+  if (typeof(exercises) === 'object') {
+    exercises.forEach( exercise => {
       workouts.push(exercise.name);
-    });
-  });
-  
+    })
+  }});
   return workouts;
 }
+
+

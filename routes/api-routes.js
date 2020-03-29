@@ -38,7 +38,6 @@ router.get("/api/workouts/range", (req, res) => {
 
 // add exercise to workout. 
 router.put("/api/workouts/:id", (req, res) => {
-console.log("req", req.body)
     Workout.findOneAndUpdate(
         {_id: req.params.id}, 
         {$push: {exercises: req.body}}

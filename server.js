@@ -1,9 +1,9 @@
 const express = require("express");
-const mongoose = require("mongoose");
+  mongoose = require("mongoose"),
 
-const PORT = process.env.PORT || 3000;
+PORT = process.env.PORT || 3000,
 
-const app = express();
+app = express();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
