@@ -20,10 +20,11 @@ monitor their progress.
 
 	
 ## Setup
-To run this project locally using npm cli:
+To run this project locally using the npm cli:
 ```
 $ type: npm install.
-$ run mongoDB server.
+$ run a mongoDB server.
+$ type: npm run seed.
 $ type: npm start.
 $ Or See deployed website.  
 ```
