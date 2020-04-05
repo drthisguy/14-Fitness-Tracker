@@ -47,7 +47,7 @@ Deployed Website: https://fittrace.herokuapp.com
 
 
 ## Sources
-https://docs.mongodb.com/manual/introduction \n
+https://docs.mongodb.com/manual/introduction    
 https://mongoosejs.com/docs/guides.html
 
 ## Issues & Contact
