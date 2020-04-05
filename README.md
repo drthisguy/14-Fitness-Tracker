@@ -52,5 +52,4 @@ https://mongoosejs.com/docs/guides.html
 
 ## Issues & Contact
 
-The chart labels for the deployed Heroku page are currently undefined.  
-The issue can't be reproduced on localhost so it's taking some time troubleshoot.  
+The chart labels currently reflect data for all previous exercises which is different from the graph lables which only plots data posted with in the last 7 day (for each day of the week.
